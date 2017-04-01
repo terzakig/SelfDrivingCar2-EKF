@@ -6,12 +6,17 @@ I have turned the `KalmanFilter` class essentially into an interface, so now all
 The `tools` class is now a namespace and contains only the `CalculateRMSE` and the Jacobian became a static member of the `MeasurementPackage` class. The class also now has an additional static method that evaluates the radar measurement function in from given position and velocity.
 ### Compiling
 Compling and running should be straightforward (I have included the test files in the build directory:
-,,,
+```
+
 cd build
+
 cmake ..
+
 make
+
 ./ExtendedKF sample-laser-radar-measurement-data-1.txt output.txt
+
 ./ExtendedKF sample-laser-radar-measurement-data-2.txt output.txt
-,,,
+```
 or,
 
