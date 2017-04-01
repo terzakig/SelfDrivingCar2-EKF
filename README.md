@@ -9,13 +9,9 @@ Compling and running should be straightforward (I have included the test files i
 ```
 
 cd build
-
 cmake ..
-
 make
-
 ./ExtendedKF sample-laser-radar-measurement-data-1.txt output.txt
-
 ./ExtendedKF sample-laser-radar-measurement-data-2.txt output.txt
 ```
 or,
