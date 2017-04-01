@@ -11,8 +11,8 @@ Compling and running should be straightforward (I have included the test files i
 cd build
 cmake ..
 make
-./ExtendedKF sample-laser-radar-measurement-data-1.txt output.txt
-./ExtendedKF sample-laser-radar-measurement-data-2.txt output.txt
+./ExtendedKF sample-laser-radar-measurement-data-1.txt output1.txt
+./ExtendedKF sample-laser-radar-measurement-data-2.txt output2.txt
 ```
 ## How the filter works
 The filter processes the LIDAR and RADAR measurements interchangeably with the same update function. The prediction is straightforward using a simple motion model involving position and velocity in a 4D state vector. The entire measurement package is passed-on to`update()`. If the origin of the measurement is the _LIDAR_, the filter performs a simple linear update to the posterior. If however, the data come from the _RADAR_, then things are a bit different.
