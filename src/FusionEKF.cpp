@@ -24,19 +24,19 @@ FusionEKF::FusionEKF() {
   
 
   //measurement covariance matrix - laser
-  /*Cov_laser_ << 0.0225, 0, // 0.0225
-              0, 0.0225;*/
-  Cov_laser_<< 5, 0, // 0.0225
-               0, 5;
+  Cov_laser_ << 0.0225, 0, // 0.0225
+              0, 0.0225;
+  /*Cov_laser_<< 5, 0, // 0.0225
+               0, 5;*/
   //measurement covariance matrix - radar
-  /*Cov_radar_ << 0.09, 0, 0,
+  Cov_radar_ << 0.09, 0, 0,
               0, 0.0009, 0, // rasinig from the original 0.0009
-              0, 0, 0.7;*/ // hiking it up from 0.09 (original)
-  Cov_radar_ << 5, 0, 0,
+              0, 0, 0.0009; // hiking it up from 0.09 (original)
+  /*Cov_radar_ << 5, 0, 0,
               0, 5, 0, 
-              0, 0, 5;  
+              0, 0, 5;  */
   
-  noise_ax = noise_ay = 1200; 
+  noise_ax = noise_ay = 5; 
   
   
 }
@@ -263,7 +263,7 @@ void FusionEKF::Update(const MeasurementPackage &pack) {
       }
       
       VectorXd x0 = x_; // we need to cache the firt mean in order to use it as prior in every step of the G-N process
-      MatrixXd Omega0;  // Similarly, Omega0 is used as the prior covariance in every step of the G-N process
+      MatrixXd Omega0;  // Similarly, Omega0 is used as the prior inverse covariance (Fisher information) in every step of the G-N process
       
       // Now inverting prior covariance, which normally should be invertible.
       // However, in the extreme case of zero-determinant, we add 0.001*I to make it invertible
@@ -335,14 +335,15 @@ void FusionEKF::Update(const MeasurementPackage &pack) {
 	  x_temp = x_ + deltax;
 	
 	  // Now, evaluate the radar model at x_temp
-	  h = MeasurementPackage::EvaluateRadarModel(x_temp);
+	  VectorXd h_temp = MeasurementPackage::EvaluateRadarModel(x_temp);
 	
 	  // now check the new error
-	  double new_error_sq = (z_r - h).dot( Qinv * (z_r - h) ) + (x_temp - x0).dot( Omega0 * (x_temp - x0) );
+	  double new_error_sq = (z_r - h_temp).dot( Qinv * (z_r - h_temp) ) + (x_temp - x0).dot( Omega0 * (x_temp - x0) );
 	  //double error_sq = (z_r - h).dot( z_r - h );
 	  if (new_error_sq < min_error_sq) { // great! We got somewhere better!
 	 
 	    x_ = x_temp;
+	    h = h_temp;
 	    Omega = Omega_temp/*-lambda*I4*/;
 	    lambda /= 10;
 	    improvement = true;
