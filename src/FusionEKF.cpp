@@ -249,7 +249,7 @@ void FusionEKF::Update(const MeasurementPackage &pack) {
     else { // 2. This the Radar update. We do Gauss-Newton optimization
       //cout<<"A RADAR measurement : "<<endl<<pack.raw_measurements_<<endl;
       
-      if (abs(pack.raw_measurements_[0]) < 0.0000001) return; // just skip it and rely on the prior
+      if (fabs(pack.raw_measurements_[0]) < 0.0000001) return; // just skip it and rely on the prior
       
       // get the measurement
       VectorXd z_r = pack.raw_measurements_;
@@ -351,7 +351,7 @@ void FusionEKF::Update(const MeasurementPackage &pack) {
 	  }
 	  else lambda *= 10;
 	
-	 diff_error_sq = abs(new_error_sq - error_sq);
+	 diff_error_sq = fabs(new_error_sq - error_sq);
 	 error_sq = new_error_sq;
 	
 	 step++;
