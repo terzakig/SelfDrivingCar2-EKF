@@ -24,8 +24,10 @@ namespace Tools {
 	
 	n++;
       }
-      for (int j =0; j < estimates[0].size(); j++)
-	vRMS[j] = vRMS[j] / n; 
+      
+      vRMS /= n;
+      vRMS.array().sqrt();
+      
       return vRMS;
   }
 
